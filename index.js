@@ -5,6 +5,8 @@ const port = 5000
 const bodyParser = require('body-parser');
 const { User } = require('./models/User');
 
+const config = require('./config/key');
+
 //바디파서를  app/x-www-form-urlencoded 형식을 가져오고
 //아래는 json 타입을 가져올수 있게 하기 위함이다.
 app.use(bodyParser.urlencoded({extended:true}));
@@ -12,7 +14,7 @@ app.use(bodyParser.json());
 
 //몽구스DB 연결
 const mongoose = require('mongoose')
-mongoose.connect(`mongodb+srv://amunre:5618@boilerplate.p1qth.mongodb.net/myFirstDatabase?retryWrites=true&w=majority`,{
+mongoose.connect(config.mongoURI ,{
   useNewUrlParser: true, useUnifiedTopology: true
 }).then(() => console.log('mongoDB Connected...'))
 .catch(err => console.log(err));
