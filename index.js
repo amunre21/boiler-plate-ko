@@ -4,6 +4,14 @@ const port = 5000
 const dbid = 'amunre'
 const dbpassword = '5618'
 
+const bodyParser = require('body-parser');
+const { User } = require('./models/User');
+
+//바디파서를  app/x-www-form-urlencoded 형식을 가져오고
+//아래는 json 타입을 가져올수 있게 하기 위함이다.
+app.use(bodyParser.urlencoded({extended:true}));
+app.use(bodyParser.json());
+
 //몽구스DB 연결
 const mongoose = require('mongoose')
 mongoose.connect(`mongodb+srv://${dbid}:${dbpassword}@boilerplate.p1qth.mongodb.net/myFirstDatabase?retryWrites=true&w=majority`,{
@@ -14,6 +22,19 @@ mongoose.connect(`mongodb+srv://${dbid}:${dbpassword}@boilerplate.p1qth.mongodb.
 
 app.get('/', (req, res) => {
   res.send('Hello World!')
+})
+
+app.post('/register',(req, res) => {
+  //회원가입 정보 입력
+    const user = new User(req.body)
+
+    //여기서 save는 몽고의 메소드다
+    user.save((err,doc) => {
+      if(err) return res.json({success: false, err})
+      return res.status(200).json({
+        success: true
+      })
+    })
 })
 
 app.listen(port, () => {  
