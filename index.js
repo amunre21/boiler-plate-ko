@@ -1,8 +1,6 @@
 const express = require('express')
 const app = express()
 const port = 5000
-const dbid = 'amunre'
-const dbpassword = '5618'
 
 const bodyParser = require('body-parser');
 const { User } = require('./models/User');
@@ -14,7 +12,7 @@ app.use(bodyParser.json());
 
 //몽구스DB 연결
 const mongoose = require('mongoose')
-mongoose.connect(`mongodb+srv://${dbid}:${dbpassword}@boilerplate.p1qth.mongodb.net/myFirstDatabase?retryWrites=true&w=majority`,{
+mongoose.connect(`mongodb+srv://amunre:5618@boilerplate.p1qth.mongodb.net/myFirstDatabase?retryWrites=true&w=majority`,{
   useNewUrlParser: true, useUnifiedTopology: true
 }).then(() => console.log('mongoDB Connected...'))
 .catch(err => console.log(err));
