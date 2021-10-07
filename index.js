@@ -21,7 +21,7 @@ mongoose.connect(`mongodb+srv://${dbid}:${dbpassword}@boilerplate.p1qth.mongodb.
 
 
 app.get('/', (req, res) => {
-  res.send('Hello World!')
+  res.send('Hello World! 실험중')
 })
 
 app.post('/register',(req, res) => {
