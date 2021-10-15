@@ -80,7 +80,22 @@ app.get('/api/users/auth',auth,(req,res)=>{
     role:req.user.role,
     image:req.user.image
   })
+})
 
+app.get('/api/users/logout',auth,(req,res)=>{
+  //로그인 상태이기때문에 auth를 거치는것이 맞다.
+
+  //미들웨어에서 auth로 인증된 req.user의 _id로 찾는다
+  //만약 찾았으면 업데이트를 해주는데, 내용은 token 내용을 비우고 결과에 다라 false혹은 200상태를 반환한다.
+  User.findOneAndUpdate({_id:req.user._id},
+    {token:""},
+    (err,user)=>{
+      if(err) return res.json({success:false, err});
+      return res.status(200).send({
+        success:true
+        ,userId:user._id
+      })
+    })  
 })
 
 
