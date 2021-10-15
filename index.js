@@ -4,7 +4,7 @@ const port = 5000
 const bodyParser = require('body-parser');
 const { User } = require('./models/User');
 const cookieParser = require('cookie-parser');
-
+const {auth} = require('./middleware/auth');
 const config = require('./config/key');
 
 //바디파서를  app/x-www-form-urlencoded 형식을 가져오고
@@ -26,7 +26,7 @@ app.get('/', (req, res) => {
 })
 
 //회원가입 포스트
-app.post('/register',(req, res) => {
+app.post('/api/users/register',(req, res) => {
   //회원가입 정보 입력
     const user = new User(req.body)
 
@@ -39,7 +39,8 @@ app.post('/register',(req, res) => {
     })
 })
 
-app.post('/login', (req,res) => {
+//로그인 라우터
+app.post('/api/users/login', (req,res) => {
   User.findOne({email:req.body.email},(err,user)=>{
     if(!user){
       return res.json({
@@ -61,11 +62,27 @@ app.post('/login', (req,res) => {
         .json({loginSuccess:true,userId:user._id})
 
       })
-
-
     })
   })
 })
+
+
+app.get('/api/users/auth',auth,(req,res)=>{
+  //여기까지 들어오면 auth를 통과해서 왔다는 뜻.
+  //이제 auth를 통과했으니 클라이언트에게 전달해줄 차례
+  res.status(200).json({
+    _id:req.user._id,
+    isAdmin:req.user.role === 0 ? false : true,
+    isAuth: true,
+    email:req.user.email,
+    name:req.user.name,
+    lastname:req.user.lastname,
+    role:req.user.role,
+    image:req.user.image
+  })
+
+})
+
 
 app.listen(port, () => {  
   console.log(`Example app listening at http://localhost:${port}`)
